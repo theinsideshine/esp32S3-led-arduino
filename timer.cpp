@@ -9,7 +9,7 @@
  * -author               educacion.ta@gmail.com
  *                       
  *                       
-* Date:  27-11-2024
+* Date:  28-11-2024
  *
  *      The inside shine.
  *

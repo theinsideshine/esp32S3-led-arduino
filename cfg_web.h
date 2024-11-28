@@ -13,7 +13,7 @@
 
 #define LED_BLINK_TIME_DEFAULT              1010          // Tiempo en ms del blinkeo del led.
 #define LED_BLINK_QUANTITY_DEFAULT          3             // Numero de blinkeo del led.
-#define LED_COLOR_DEFAULT                   1             // Color del led.
+#define LED_COLOR_DEFAULT                   1             // Color del led ROJO
 #define ST_TEST_DEFAULT                     0             //  Estado del test pòr defecto.
 #define ST_MODE_DEFAULT                     ST_MODE_TEST  //  Modo de operacion del sistema. 
 
@@ -23,7 +23,8 @@
 #define EEPROM_ADDRESS_MAGIC_NUMBER     0
 #define EEPROM_ADDRESS_LED_BLINK_TIME     (EEPROM_ADDRESS_MAGIC_NUMBER + sizeof(uint32_t))        // Cambiado a uint32_t
 #define EEPROM_ADDRESS_LED_BLINK_QUANTITY (EEPROM_ADDRESS_LED_BLINK_TIME + sizeof(uint32_t))      // Cambiado a uint32_t
-#define EEPROM_ADDRESS_LOG_LEVEL          (EEPROM_ADDRESS_LED_BLINK_QUANTITY + sizeof(uint32_t))           // Cambiado a uint32_t
+#define EEPROM_ADDRESS_LED_COLOR          (EEPROM_ADDRESS_LED_BLINK_QUANTITY + sizeof(uint32_t))  // Cambiado a uint32_t
+#define EEPROM_ADDRESS_LOG_LEVEL          (EEPROM_ADDRESS_LED_COLOR + sizeof(uint32_t))           // Cambiado a uint32_t
 #define EEPROM_ADDRESS_ST_TEST            (EEPROM_ADDRESS_LOG_LEVEL + sizeof(uint32_t))           // Cambiado a uint32_t
 #define EEPROM_ADDRESS_ST_MODE            (EEPROM_ADDRESS_ST_TEST + sizeof(uint32_t))             // Cambiado a uint32_t
 
@@ -48,6 +49,9 @@ class CConfig
     uint32_t get_led_blink_quantity( void );
     void set_led_blink_quantity( uint32_t ); 
 
+    uint32_t get_led_color( void );
+    void set_led_color( uint32_t );
+
     uint32_t get_log_level( void );
     void set_log_level( uint32_t enable );
 
@@ -64,8 +68,9 @@ class CConfig
     uint32_t log_level;          // 0 = log de informacion de control desactivada.
     uint32_t st_test;            // Estado del ensayo 
     uint32_t st_mode;            // Modo del ensayo      
-    uint32_t led_blink_time;         // Tiempo en ms de blinkeo del led. 
-    uint32_t led_blink_quantity;     // Veces de blinkeo del led. 
+    uint32_t led_blink_time;     // Tiempo en ms de blinkeo del led. 
+    uint32_t led_blink_quantity; // Veces de blinkeo del led. 
+    uint32_t led_color;          // Color del led.
       
     void send_all_params( JsonDocument& );      
     void send_ok( JsonDocument& );

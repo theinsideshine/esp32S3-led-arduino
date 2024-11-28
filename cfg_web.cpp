@@ -31,6 +31,7 @@ void CConfig::init() {
         
         set_led_blink_time(LED_BLINK_TIME_DEFAULT);
         set_led_blink_quantity(LED_BLINK_QUANTITY_DEFAULT);
+        set_led_color(LED_COLOR_DEFAULT);
         
         set_log_level(LOG_MSG); // Setea log por defecto
         set_st_test(ST_TEST_DEFAULT);
@@ -44,6 +45,7 @@ void CConfig::init() {
         Serial.println("Magic number coincide. Cargando valores de EEPROM...");      
         EEPROM.get(EEPROM_ADDRESS_LED_BLINK_TIME, led_blink_time);
         EEPROM.get(EEPROM_ADDRESS_LED_BLINK_QUANTITY, led_blink_quantity);
+        EEPROM.get(EEPROM_ADDRESS_LED_COLOR, led_color);
 
         EEPROM.get(EEPROM_ADDRESS_LOG_LEVEL, log_level);
 
@@ -55,6 +57,8 @@ void CConfig::init() {
         Serial.println(led_blink_quantity);
         Serial.print("Log level: ");
         Serial.println(log_level);
+        Serial.print("Led color: ");
+        Serial.println(led_color);
 
         set_st_test(ST_TEST_DEFAULT);
         set_st_mode(ST_MODE_DEFAULT);
@@ -92,6 +96,11 @@ void CConfig::handleHttpRequest(WebServer &server) {
 
                 if ( doc.containsKey("led_blink_quantity") ) {
                     set_led_blink_quantity( doc["led_blink_quantity"] );
+                    known_key = true;
+                }
+
+                if ( doc.containsKey("led_color") ) {
+                    set_led_color( doc["led_color"] );
                     known_key = true;
                 }
                        
@@ -169,6 +178,18 @@ void CConfig::set_led_blink_quantity( uint32_t val )
     EEPROM.commit();  // Asegura que el valor se escriba
 }
 
+uint32_t CConfig::get_led_color( void )
+{
+    return led_color;
+}
+
+void CConfig::set_led_color( uint32_t val )
+{
+    led_color = val;
+    EEPROM.put( EEPROM_ADDRESS_LED_COLOR, val );
+    EEPROM.commit();  // Asegura que el valor se escriba
+}
+
 uint32_t CConfig::get_log_level( void )
 {
     return log_level;
@@ -208,74 +229,13 @@ void CConfig::set_st_mode( uint32_t mode )
     EEPROM.put( EEPROM_ADDRESS_ST_MODE, st_mode );
     EEPROM.commit();  // Asegura que el valor se escriba
 }
-/*
-
-API Endpoints
-1. Obtener Parámetros
-Puedes consultar los parámetros configurados en el dispositivo mediante el endpoint GET:
-
-Endpoint: GET {{urlLocalEsp}}/obtenerParametros
-
-curl --location 'http://192.168.0.53/obtenerParametros'
-
-
-2. Modificar Parámetros y Enviar Comandos
-Para modificar parámetros o enviar comandos, utiliza el endpoint PUT:
-
-Endpoint: PUT {{urlLocalEsp}}/parametros
-
-curl --location --request PUT 'http://192.168.0.53/parametros' \
---header 'Content-Type: application/json' \
---data '{ "log_level": "1" }'
-
-Parámetros y Comandos Disponibles
-Estos son los parámetros y comandos que puedes enviar mediante JSON en el cuerpo de la solicitud:
-
-General Information:
-
-{ "info": "all-params" } – Envía todos los parámetros en formato JSON.
-{ "info": "all-calibration" } – Envía todos los parámetros de calibración.
-{ "info": "version" } – Envía la versión del firmware.
-{ "info": "status" } – Devuelve el estado del ensayo.
-{ "info": "led_blink_time" } – Devuelve el tiempo de parpadeo del LED en ms.
-{ "info": "led_blink_quantity" } – Devuelve las veces del parpadeo del LED.
-{ "info": "st_mode" } – Devuelve el modo del ensayo.
-{ "info": "log_level" } – Devuelve el nivel de log por puerto serie.
-Log Level:
-
-{ "log_level": "0" } – Desactiva el log.
-{ "log_level": "1" } – Log básico de mensajes.
-{ "log_level": "2" } – Log habilitado en formato json.              
-{ "log_level": "3" } – Log en formato compatible con Arduino plotter.
-
-Control Commands:
-
-{ "cmd": "start" } – Inicia el ensayo.
-Configuración de Parámetros:
-
-{ "led_blink_time": "1000" } – Tiempo en ms para el parpadeo del LED.
-{ "led_blink_quantity": "5" } – Cantidad de veces del parpadeo del LED.
-{ "st_test": "1" } – Activa el ensayo (0 para desactivado, 1 para activado).
-{ "st_mode": "0" } – Configura el modo del ensayo:
-0 -   ST_MODE_TEST: Ensayo activado.
-200 - ST_MODE_DEMO: Uso del demo
-
-
-Demo para salida Json
-{ "st_mode": "200" ,
-"log_level": "2" }
-
-Demo para salida Arduino Plotter
-{ "st_mode": "200" ,
-"log_level": "3" }
-
-*/
 
 
 void CConfig::send_all_params( JsonDocument& doc )
 {     
     doc["led_blink_time"]     = get_led_blink_time();  
-    doc["led_blink_quantity"] = get_led_blink_quantity();         
+    doc["led_blink_quantity"] = get_led_blink_quantity();  
+    doc["led_color"]          = get_led_color();       
     doc["st_test"]            = get_st_test();  
     doc["st_mode"]            = get_st_mode();  
     doc["log_level"]          = get_log_level();

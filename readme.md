@@ -93,8 +93,11 @@ Configure the test mode:
 Enable test mode:
 { "st_mode": "1" }
 
-Enable demo mode:
-{ "st_mode": "200" }
+Enable demo mode: JSON MODE
+{ "st_mode": "200",  "log_level": "2" }
+
+Enable demo mode: ARDUINO PLOTTER MODE
+{ "st_mode": "200",  "log_level": "3" }
 
 --- 
 

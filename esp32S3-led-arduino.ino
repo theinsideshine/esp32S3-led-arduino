@@ -9,7 +9,7 @@
  * -author               educacion.ta@gmail.com
  *                       
  *                       
-* Date:  27-11-2024
+* Date:  28-11-2024
  *
  *      The inside shine.
  *
@@ -73,7 +73,7 @@ void end_experiment( void ) {
     uint16_t raw, filtered,danger_point=2500;
     uint8_t state=0; 
     
-    Led.n_blink(5, 500);
+    Led.blink(5, 500);
     for (raw=0;raw<5000;raw++){
         filtered = raw+ 500 ;
         if (filtered >danger_point ){ 
@@ -129,13 +129,13 @@ void setup()
   server.begin();  // Inicia el servidor web
   Serial.println("Servidor web iniciado");
 
-  #ifdef LED_PRESENT
+ 
     Led.init();
-    Log.msg( F("Led init") );
-    delay(2000); // Espera para pasar de estado.
-    Led.n_blink(2, 2000); // 2 blinks cada 1000 ms
-  #endif // LED_PRESENT   
-
+    Led.set_color(1); // Configura el color a rojo (ID = 1)
+    Led.on();        // Enciende el LED
+    delay(1000);     // Espera 1 segundo
+    Led.off();       // Apaga el LED
+ 
   Log.msg( F("Sistema inicializado") );
 }
 
@@ -150,7 +150,10 @@ void loop()
   
   // Actualiza el nivel de log para detener en tiempo real el envio de parametros.
   Log.set_level( Config.get_log_level() );  
- 
+
+  // Actualiza el color de led.
+  Led.set_color( Config.get_led_color() );  
+
   switch ( st_loop ) {
 
     case ST_LOOP_INIT:
@@ -167,7 +170,7 @@ void loop()
     case ST_LOOP_IDLE:   
           led_blink_qty =  Config.get_led_blink_quantity();     // Carga las veces a blinkear
           Timer_led.start();
-          //Led.on();
+          Led.on();
           Log.msg( F("LED ON"));
           st_loop = ST_LOOP_LED_ON;       
       
@@ -178,7 +181,7 @@ void loop()
       if( Timer_led.expired( Config.get_led_blink_time() ) ) {
                 
            Log.msg( F("LED OFF"));      
-           //Led.off();             
+           Led.off();             
            Timer_led.start();
            st_loop = ST_LOOP_LED_OFF; 
           }
@@ -191,7 +194,7 @@ void loop()
 
           led_blink_qty--; // Decrementa la cantidad de blinks restantes
           if (led_blink_qty > 0) {
-            //Led.on();
+            Led.on();
             Log.msg(F("LED ON"));
             Timer_led.start();
             st_loop = ST_LOOP_LED_ON;
