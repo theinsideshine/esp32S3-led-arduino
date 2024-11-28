@@ -87,6 +87,23 @@ LED Blink Quantity
 Set the number of LED blinks:
 { "led_blink_quantity": "5" }
 
+
+LED Color
+Set the color of LED
+{ "led_color": "1" }
+
+    0: Apagado
+    1: Rojo
+    2: Amarillo
+    3: Verde
+    4: Blanco
+    5: Azul
+    6: Cian
+    7: Magenta
+    8: Naranja
+    9: Violeta
+    10: Gris
+
 Test Mode
 Configure the test mode:
 
