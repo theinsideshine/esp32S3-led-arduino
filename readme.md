@@ -140,3 +140,10 @@ ESP32 - Execution modes - Logger via serial port
 [![ESP32 - Execution modes - Logger via serial port](images/esp32-logger.png)](https://youtu.be/TlgQHpessV4)
 
 
+ESP32 - Arduino vs Micropython - 
+The main differences in the implementation of non-blocking architecture with a state machine control
+ flow between Arduino and Micropython are discussed. And why not the use of IDF.
+[![ESP32 - Arduino vs Micropython ](images/Ard-vs-Mpy.png)](https://www.youtube.com/watch?v=uNnV7amWa5Y)
+
+
+Repository: https://github.com/theinsideshine/esp32S3-led-micropython
